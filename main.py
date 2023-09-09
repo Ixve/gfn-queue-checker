@@ -487,7 +487,7 @@ except KeyError:
 try:
     with open("response_eusoutheast.json") as f:
         x = json.load(f)
-        print(f'EU Southeast ({x["requestStatus"]["serverId"]}}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
+        print(f'EU Southeast ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
         x = ""
         f.close()
 except KeyError:
