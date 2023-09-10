@@ -2,8 +2,38 @@ import os
 import time
 import json
 import requests
-from settings import headers
 from settings import data
+
+def refresh_key():
+    try:
+        r = requests.post("https://login.nvidia.com/token", data=data, headers={'Content-Type': 'application/x-www-form-urlencoded'})
+        if r.status_code == 200:
+            k = r.json()
+            with open('authorization.json', 'w') as fw:
+                x = {"authorization": f'GFNJWT {k["id_token"]}'}
+                json.dump(x, fw, indent=4, sort_keys=True)
+                fw.close()
+            print("[#] AUTHORIZATION KEY REFRESHED - RELAUNCH PROGRAM [#]")
+            exit()
+        else:
+            print("An error has occured while POSTing data! \n\n Status Code: {r.status_code}\nReturned Data: {r.text}\n")
+            exit()
+    except Exception as e:
+        print(f"Unknown exception has occured: \n\n {e}")
+        exit()
+
+try:
+    with open('authorization.json', 'r') as tx:
+        nx = json.load(tx)
+except:
+    refresh_key()
+
+headers = {
+    "Accept": "*/*",
+    "authorization": f'{nx["authorization"]}',
+    "content-type": "application/json",
+}
+
 
 ############################################################ EU WEST ############################################################
 def eu_west():
@@ -393,16 +423,6 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
         print(f"Unknown Exception: \n\n {e}")
         return None
 
-def refresh_key():
-    try:
-        r = requests.post("https://login.nvidia.com/token", data=data, headers={'Content-Type': 'application/x-www-form-urlencoded'})
-        k = r.json()
-        print(f'\n\nNew auth key (replace the one in settings.py):\n\nGFNJWT {k["id_token"]}')
-        exit()
-    except Exception as e:
-        print(f"Unknown exception has occured: \n\n {e}")
-        exit()
-
 try:
     eu_west()
 except KeyError:
@@ -444,7 +464,7 @@ except KeyError:
     print("\nKeyError, exitting.\n")
     exit()
 
-print("\n\n \ \ ....... FINAL DATA RESULTS ....... / / ")
+print("\n\n\ \ ....... FINAL DATA RESULTS ....... / / ")
 try:
     with open("response_euwest.json") as f:
         x = json.load(f)
@@ -510,6 +530,7 @@ except KeyError:
     print("Missing queue position data for EU Southeast... Continuing")
     x = ""
     f.close()  
+
     
 try:
     os.remove("response_eucentral.json")
