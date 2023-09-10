@@ -3,9 +3,15 @@ Prerequisites:
 * `requests` library (`pip install requests`)
 
 # Usage
-First go to the [GeForce NOW web library](https://play.geforcenow.com/) in a supported browser (Such as vanilla Google Chrome)<br><br>
-Open up DevTools (Three dots in the top right of your browser -> More Tools -> Developer tools) and go to the "Network" tab<br><br>
-Start *any* game you wish - it doesn't matter<br><br>
-Press on the second `session?keyboardLayout=en-US&languageCode=en_US` and go to the "Payload" tab, press "view source", copy it all, and save it to `request.json` (In the same folder as the program)<br><br>
-After that go back to the DevTools, go to Headers and find the "authorization" field, and copy the value (e.g. GFNJWT AieIJfnXjdfje....), then put it in settings.py and save it.<br>
-Then just run the program and enjoy!<br><br>
+Open up a supported browser - such as vanilla Google Chrome<br><br>
+Open DevTools by pressing the three dots in the top left -> More Tools -> Developer Tools<br>(MAKE SURE TO DO THIS IN A NEW TAB / BEFORE LOADING GFN WEB)<br><br>
+Navigate over to the Network tab in the DevTools<br><br>
+Navigate over to the [GeForce NOW web library (play.geforcenow.com)](https://play.geforcenow.com/) in your browser<br><br>
+Find and press on the `token` request, go to the payload tab, press view source, select it all and copy it<br><br>
+After copying the token request, open up settings.py and put it in the `data = ""` (between the quotation marks) (make sure to wipe the text beforehand.. obviously..)<br><br>
+Go back to the network tab in DevTools, start any game you want (it does not matter which)<br><br>
+Find and press the second `session?keyboardLayout=en-US&languageCode=en_US` request, go to the payload tab, press view source, select it all and copy it<br><br>
+Open up any text editor of your liking (notepad works too), paste the previously obtained data in there and save it as `request.json` (it's important that it's a json file.. obviously..)<br><br>
+Now just run the program and enjoy!
+
+<br><br><br><br>(*I will work on automating all of this eventually*)
