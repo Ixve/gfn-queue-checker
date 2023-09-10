@@ -3,6 +3,7 @@ import time
 import json
 import requests
 from settings import headers
+from settings import data
 
 ############################################################ EU WEST ############################################################
 def eu_west():
@@ -25,7 +26,8 @@ def eu_west():
                 x = ""
                 return None
             elif r2.status_code == 401:
-                print("[!] UNAUTHORIZED - REFRESH AUTH KEY [!]")
+                print("[!] UNAUTHORIZED - PRINTING NEW AUTH KEY [!]")
+                refresh_key()
                 exit()
             elif r2.status_code == 200:
                 with open("response_euwest.json", "w") as fw:
@@ -89,7 +91,8 @@ def eu_northwest():
                 x = ""
                 return None
             elif r2.status_code == 401:
-                print("[!] UNAUTHORIZED - REFRESH AUTH KEY [!]")
+                print("[!] UNAUTHORIZED - PRINTING NEW AUTH KEY [!]")
+                refresh_key()
                 exit()
             elif r2.status_code == 200:
                 with open("response_eunorthwest.json", "w") as fw:
@@ -152,7 +155,8 @@ def eu_northeast():
                 x = ""
                 return None
             elif r2.status_code == 401:
-                print("[!] UNAUTHORIZED - REFRESH AUTH KEY [!]")
+                print("[!] UNAUTHORIZED - PRINTING NEW AUTH KEY [!]")
+                refresh_key()
                 exit()
             elif r2.status_code == 200:
                 with open("response_eunortheast.json", "w") as fw:
@@ -216,7 +220,8 @@ def eu_central():
                 x = ""
                 return None
             elif r2.status_code == 401:
-                print("[!] UNAUTHORIZED - REFRESH AUTH KEY [!]")
+                print("[!] UNAUTHORIZED - PRINTING NEW AUTH KEY [!]")
+                refresh_key()
                 exit()
             elif r2.status_code == 200:
                 with open("response_eucentral.json", "w") as fw:
@@ -280,7 +285,8 @@ def eu_southwest():
                 x = ""
                 return None
             elif r2.status_code == 401:
-                print("[!] UNAUTHORIZED - REFRESH AUTH KEY [!]")
+                print("[!] UNAUTHORIZED - PRINTING NEW AUTH KEY [!]")
+                refresh_key()
                 exit()
             elif r2.status_code == 200:
                 with open("response_eusouthwest.json", "w") as fw:
@@ -344,7 +350,8 @@ def eu_southeast():
                 x = ""
                 return None
             elif r2.status_code == 401:
-                print("[!] UNAUTHORIZED - REFRESH AUTH KEY [!]")
+                print("[!] UNAUTHORIZED - PRINTING NEW AUTH KEY [!]")
+                refresh_key()
                 exit()
             elif r2.status_code == 200:
                 with open("response_eusoutheast.json", "w") as fw:
@@ -386,6 +393,15 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
         print(f"Unknown Exception: \n\n {e}")
         return None
 
+def refresh_key():
+    try:
+        r = requests.post("https://login.nvidia.com/token", data=data, headers={'Content-Type': 'application/x-www-form-urlencoded'})
+        k = r.json()
+        print(f'\n\nNew auth key (replace the one in settings.py):\n\nGFNJWT {k["id_token"]}')
+        exit()
+    except Exception as e:
+        print(f"Unknown exception has occured: \n\n {e}")
+        exit()
 
 try:
     eu_west()
@@ -494,7 +510,15 @@ except KeyError:
     print("Missing queue position data for EU Southeast... Continuing")
     x = ""
     f.close()  
-
     
-
+try:
+    os.remove("response_eucentral.json")
+    os.remove("response_eusoutheast.json")
+    os.remove("response_eusouthwest.json")
+    os.remove("response_eunortheast.json")
+    os.remove("response_eunorthwest.json")
+    os.remove("response_euwest.json")
+except Exception as e:
+    print(f"Unknown exception whilst removing files: \n\n {e}")
 exit()
+
