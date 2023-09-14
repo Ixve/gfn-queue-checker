@@ -63,12 +63,12 @@ def eu_west():
                 refresh_key()
                 exit()
             elif 429 in (r1.status_code, r2.status_code):
-                flag = 1
                 if flag == 1:
                     print("[!] 429 Too Many Requests - waiting 1 minute [!]")
                     time.sleep(60)
                     eu_west()
                 else:
+                    flag = 1
                     print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
                     time.sleep(30)
                     eu_west()
@@ -138,12 +138,12 @@ def eu_northwest():
                 refresh_key()
                 exit()
             elif 429 in (r1.status_code, r2.status_code):
-                flag = 1
                 if flag == 1:
                     print("[!] 429 Too Many Requests - waiting 1 minute [!]")
                     time.sleep(60)
                     eu_northwest()
                 else:
+                    flag = 1
                     print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
                     time.sleep(30)
                     eu_northwest()
@@ -212,12 +212,12 @@ def eu_northeast():
                 refresh_key()
                 exit()
             elif 429 in (r1.status_code, r2.status_code):
-                flag = 1
                 if flag == 1:
                     print("[!] 429 Too Many Requests - waiting 1 minute [!]")
                     time.sleep(60)
                     eu_northeast()
                 else:
+                    flag = 1
                     print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
                     time.sleep(30)
                     eu_northeast()
@@ -287,12 +287,12 @@ def eu_central():
                 refresh_key()
                 exit()
             elif 429 in (r1.status_code, r2.status_code):
-                flag = 1
                 if flag == 1:
                     print("[!] 429 Too Many Requests - waiting 1 minute [!]")
                     time.sleep(60)
                     eu_central()
                 else:
+                    flag = 1
                     print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
                     time.sleep(30)
                     eu_central()
@@ -362,12 +362,12 @@ def eu_southwest():
                 refresh_key()
                 exit()
             elif 429 in (r1.status_code, r2.status_code):
-                flag = 1
                 if flag == 1:
                     print("[!] 429 Too Many Requests - waiting 1 minute [!]")
                     time.sleep(60)
                     eu_southwest()
                 else:
+                    flag = 1
                     print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
                     time.sleep(30)
                     eu_southwest()
@@ -437,12 +437,12 @@ def eu_southeast():
                 refresh_key()
                 exit()
             elif 429 in (r1.status_code, r2.status_code):
-                flag = 1
                 if flag == 1:
                     print("[!] 429 Too Many Requests - waiting 1 minute [!]")
                     time.sleep(60)
                     eu_southeast()
                 else:
+                    flag = 1
                     print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
                     time.sleep(30)
                     eu_southeast()
