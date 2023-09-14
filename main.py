@@ -15,6 +15,9 @@ def refresh_key():
                 fw.close()
             print("[#] AUTHORIZATION KEY REFRESHED - RELAUNCH PROGRAM [#]")
             exit()
+        elif r.status_code == 429:
+            print("[!] Error refreshing key: Rate limited (429) - waiting 30 seconds...")
+            time.sleep(30)
         else:
             print("An error has occured while POSTing data! \n\n Status Code: {r.status_code}\nReturned Data: {r.text}\n")
             exit()
@@ -59,6 +62,16 @@ def eu_west():
                 print("[!] UNAUTHORIZED - PRINTING NEW AUTH KEY [!]")
                 refresh_key()
                 exit()
+            elif 429 in (r1.status_code, r2.status_code):
+                flag = 1
+                if flag == 1:
+                    print("[!] 429 Too Many Requests - waiting 1 minute [!]")
+                    time.sleep(60)
+                    eu_west()
+                else:
+                    print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
+                    time.sleep(30)
+                    eu_west()
             elif r2.status_code == 200:
                 with open("response_euwest.json", "w") as fw:
                     print("Dumping to response_euwest.json")
@@ -124,6 +137,16 @@ def eu_northwest():
                 print("[!] UNAUTHORIZED - PRINTING NEW AUTH KEY [!]")
                 refresh_key()
                 exit()
+            elif 429 in (r1.status_code, r2.status_code):
+                flag = 1
+                if flag == 1:
+                    print("[!] 429 Too Many Requests - waiting 1 minute [!]")
+                    time.sleep(60)
+                    eu_northwest()
+                else:
+                    print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
+                    time.sleep(30)
+                    eu_northwest()
             elif r2.status_code == 200:
                 with open("response_eunorthwest.json", "w") as fw:
                     print("Dumping to response_eunorthwest.json")
@@ -166,7 +189,7 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
 
 ############################################################ EU NORTHEAST ############################################################
 def eu_northeast():
-    print("=============== EU WEST ===============")
+    print("=============== EU NORTHEAST ===============")
     try:
         with open("request.json", "r") as f:
             x = json.load(f)
@@ -188,6 +211,16 @@ def eu_northeast():
                 print("[!] UNAUTHORIZED - PRINTING NEW AUTH KEY [!]")
                 refresh_key()
                 exit()
+            elif 429 in (r1.status_code, r2.status_code):
+                flag = 1
+                if flag == 1:
+                    print("[!] 429 Too Many Requests - waiting 1 minute [!]")
+                    time.sleep(60)
+                    eu_northeast()
+                else:
+                    print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
+                    time.sleep(30)
+                    eu_northeast()
             elif r2.status_code == 200:
                 with open("response_eunortheast.json", "w") as fw:
                     print("Dumping to response_eunortheast.json")
@@ -253,6 +286,16 @@ def eu_central():
                 print("[!] UNAUTHORIZED - PRINTING NEW AUTH KEY [!]")
                 refresh_key()
                 exit()
+            elif 429 in (r1.status_code, r2.status_code):
+                flag = 1
+                if flag == 1:
+                    print("[!] 429 Too Many Requests - waiting 1 minute [!]")
+                    time.sleep(60)
+                    eu_central()
+                else:
+                    print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
+                    time.sleep(30)
+                    eu_central()
             elif r2.status_code == 200:
                 with open("response_eucentral.json", "w") as fw:
                     print("Dumping to response_eucentral.json")
@@ -318,6 +361,16 @@ def eu_southwest():
                 print("[!] UNAUTHORIZED - PRINTING NEW AUTH KEY [!]")
                 refresh_key()
                 exit()
+            elif 429 in (r1.status_code, r2.status_code):
+                flag = 1
+                if flag == 1:
+                    print("[!] 429 Too Many Requests - waiting 1 minute [!]")
+                    time.sleep(60)
+                    eu_southwest()
+                else:
+                    print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
+                    time.sleep(30)
+                    eu_southwest()
             elif r2.status_code == 200:
                 with open("response_eusouthwest.json", "w") as fw:
                     print("Dumping to response_eusouthwest.json")
@@ -361,7 +414,7 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
 
 ############################################################ EU SOUTHEAST ############################################################
 def eu_southeast():
-    print("=============== EU WEST ===============")
+    print("=============== EU SOUTHEAST ===============")
     try:
         with open("request.json", "r") as f:
             x = json.load(f)
@@ -383,6 +436,16 @@ def eu_southeast():
                 print("[!] UNAUTHORIZED - PRINTING NEW AUTH KEY [!]")
                 refresh_key()
                 exit()
+            elif 429 in (r1.status_code, r2.status_code):
+                flag = 1
+                if flag == 1:
+                    print("[!] 429 Too Many Requests - waiting 1 minute [!]")
+                    time.sleep(60)
+                    eu_southeast()
+                else:
+                    print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
+                    time.sleep(30)
+                    eu_southeast()
             elif r2.status_code == 200:
                 with open("response_eusoutheast.json", "w") as fw:
                     print("Dumping to response_eusoutheast.json")
@@ -425,41 +488,37 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
 
 try:
     eu_west()
+    flag = 0
 except KeyError:
     print("\nKeyError, continuing\n")
 
 try:
-    print("Waiting 10 seconds in-case of ratelimit...")
-    time.sleep(10)
     eu_northwest()
+    flag = 0
 except KeyError:
     print("\nKeyError, continuing\n")
 
 try:
-    print("Waiting 10 seconds in-case of ratelimit...")
-    time.sleep(10)
     eu_northeast()
+    flag = 0
 except KeyError:
     print("\nKeyError, continuing\n")
 
 try:
-    print("Waiting 10 seconds in-case of ratelimit...")
-    time.sleep(10)
     eu_central()
+    flag = 0
 except KeyError:
     print("\nKeyError, continuing\n")
 
 try:
-    print("Waiting 10 seconds in-case of ratelimit...")
-    time.sleep(10)
     eu_southwest()
+    flag = 0
 except KeyError:
     print("\nKeyError, continuing\n")
 
 try:
-    print("Waiting 10 seconds in-case of ratelimit...")
-    time.sleep(10)
     eu_southeast()
+    flag = 0
 except KeyError:
     print("\nKeyError, exitting.\n")
     exit()
@@ -474,7 +533,11 @@ try:
 except KeyError:
     print("Missing queue position data for EU West... Continuing")
     x = ""
-    f.close()    
+    f.close()
+except FileNotFoundError:
+    print("Missing data for EU West... Waiting 60 seconds and retrying")
+    time.sleep(60)
+    eu_west()
 
 try:
     with open("response_eunorthwest.json") as f:
@@ -485,7 +548,11 @@ try:
 except KeyError:
     print("Missing queue position data for EU Northwest... Continuing")
     x = ""
-    f.close()  
+    f.close()
+except FileNotFoundError:
+    print("Missing data for EU Northwest... Waiting 60 seconds and retrying")
+    time.sleep(60)
+    eu_northwest()
 
 try:
     with open("response_eunortheast.json") as f:
@@ -496,7 +563,11 @@ try:
 except KeyError:
     print("Missing queue position data for EU Northeast... Continuing")
     x = ""
-    f.close()  
+    f.close()
+except FileNotFoundError:
+    print("Missing data for EU Northeast... Waiting 60 seconds and retrying")
+    time.sleep(60)
+    eu_northeast()
 
 try:
     with open("response_eucentral.json") as f:
@@ -507,7 +578,11 @@ try:
 except KeyError:
     print("Missing queue position data for EU Central... Continuing")
     x = ""
-    f.close()  
+    f.close()
+except FileNotFoundError:
+    print("Missing data for EU Central... Waiting 60 seconds and retrying")
+    time.sleep(60)
+    eu_central()
 
 try:
     with open("response_eusouthwest.json") as f:
@@ -519,6 +594,10 @@ except KeyError:
     print("Missing queue position data for EU Southwest... Continuing")
     x = ""
     f.close()  
+except FileNotFoundError:
+    print("Missing data for EU Southwest... Waiting 60 seconds and retrying")
+    time.sleep(60)
+    eu_southwest()
 
 try:
     with open("response_eusoutheast.json") as f:
@@ -529,7 +608,11 @@ try:
 except KeyError:
     print("Missing queue position data for EU Southeast... Continuing")
     x = ""
-    f.close()  
+    f.close()
+except FileNotFoundError:
+    print("Missing data for EU Southeast... Waiting 60 seconds and retrying")
+    time.sleep(60)
+    eu_southeast()
 
     
 try:
