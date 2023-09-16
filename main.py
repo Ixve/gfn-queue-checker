@@ -3,7 +3,7 @@ import time
 import json
 import requests
 from settings import data
-
+flag = 0
 def refresh_key():
     try:
         r = requests.post("https://login.nvidia.com/token", data=data, headers={'Content-Type': 'application/x-www-form-urlencoded'})
@@ -40,35 +40,37 @@ headers = {
 
 ############################################################ EU WEST ############################################################
 def eu_west():
-    print("=============== EU WEST ===============")
+    print("\n\n=============== EU WEST ===============")
     try:
         with open("request.json", "r") as f:
             x = json.load(f)
             r1 = requests.post("https://eu-west.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r1.status_code}")
-            if r1.status_code == 500:
-                print("[!] INTERNAL SERVER ERROR [!]")
-                f.close()
-                x = ""
-                return None
             r2 = requests.post("https://eu-west.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r2.status_code}")
-            if r2.status_code == 500:
+            if 500 in (r1.status_code, r2.status_code):
                 print("[!] INTERNAL SERVER ERROR [!]")
                 f.close()
                 x = ""
                 return None
             elif r2.status_code == 401:
-                print("[!] UNAUTHORIZED - PRINTING NEW AUTH KEY [!]")
+                print("[!] UNAUTHORIZED - GETTING NEW AUTH KEY [!]")
                 refresh_key()
                 exit()
             elif 429 in (r1.status_code, r2.status_code):
+                global flag
                 if flag == 1:
                     print("[!] 429 Too Many Requests - waiting 1 minute [!]")
+                    flag += 1
                     time.sleep(60)
                     eu_west()
+                elif flag == 2:
+                    flag += 1
+                    print("[!] 429 Too Many Requests - waiting 3 minutes [!]")
+                    time.sleep(180)
+                    eu_west()
                 else:
-                    flag = 1
+                    flag += 1
                     print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
                     time.sleep(30)
                     eu_west()
@@ -115,7 +117,7 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
 ############################################################ EU NORTHWEST ############################################################
 
 def eu_northwest():
-    print("=============== EU NORTHWEST ===============")
+    print("\n\n=============== EU NORTHWEST ===============")
     try:
         with open("request.json", "r") as f:
             x = json.load(f)
@@ -134,16 +136,23 @@ def eu_northwest():
                 x = ""
                 return None
             elif r2.status_code == 401:
-                print("[!] UNAUTHORIZED - PRINTING NEW AUTH KEY [!]")
+                print("[!] UNAUTHORIZED - GETTING NEW AUTH KEY [!]")
                 refresh_key()
                 exit()
             elif 429 in (r1.status_code, r2.status_code):
+                global flag
                 if flag == 1:
                     print("[!] 429 Too Many Requests - waiting 1 minute [!]")
+                    flag += 1
                     time.sleep(60)
                     eu_northwest()
+                elif flag == 2:
+                    flag += 1
+                    print("[!] 429 Too Many Requests - waiting 3 minutes [!]")
+                    time.sleep(180)
+                    eu_northwest()
                 else:
-                    flag = 1
+                    flag += 1
                     print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
                     time.sleep(30)
                     eu_northwest()
@@ -189,7 +198,7 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
 
 ############################################################ EU NORTHEAST ############################################################
 def eu_northeast():
-    print("=============== EU NORTHEAST ===============")
+    print("\n\n=============== EU NORTHEAST ===============")
     try:
         with open("request.json", "r") as f:
             x = json.load(f)
@@ -208,16 +217,23 @@ def eu_northeast():
                 x = ""
                 return None
             elif r2.status_code == 401:
-                print("[!] UNAUTHORIZED - PRINTING NEW AUTH KEY [!]")
+                print("[!] UNAUTHORIZED - GETTING NEW AUTH KEY [!]")
                 refresh_key()
                 exit()
             elif 429 in (r1.status_code, r2.status_code):
+                global flag
                 if flag == 1:
                     print("[!] 429 Too Many Requests - waiting 1 minute [!]")
+                    flag += 1
                     time.sleep(60)
                     eu_northeast()
+                elif flag == 2:
+                    flag += 1
+                    print("[!] 429 Too Many Requests - waiting 3 minutes [!]")
+                    time.sleep(180)
+                    eu_northeast()
                 else:
-                    flag = 1
+                    flag += 1
                     print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
                     time.sleep(30)
                     eu_northeast()
@@ -264,7 +280,7 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
 
 ############################################################ EU CENTRAL ############################################################
 def eu_central():
-    print("=============== EU CENTRAL ===============")
+    print("\n\n=============== EU CENTRAL ===============")
     try:
         with open("request.json", "r") as f:
             x = json.load(f)
@@ -283,16 +299,23 @@ def eu_central():
                 x = ""
                 return None
             elif r2.status_code == 401:
-                print("[!] UNAUTHORIZED - PRINTING NEW AUTH KEY [!]")
+                print("[!] UNAUTHORIZED - GETTING NEW AUTH KEY [!]")
                 refresh_key()
                 exit()
             elif 429 in (r1.status_code, r2.status_code):
+                global flag
                 if flag == 1:
                     print("[!] 429 Too Many Requests - waiting 1 minute [!]")
+                    flag += 1
                     time.sleep(60)
                     eu_central()
+                elif flag == 2:
+                    flag += 1
+                    print("[!] 429 Too Many Requests - waiting 3 minutes [!]")
+                    time.sleep(180)
+                    eu_central()
                 else:
-                    flag = 1
+                    flag += 1
                     print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
                     time.sleep(30)
                     eu_central()
@@ -339,7 +362,7 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
 
 ############################################################ EU SOUTHWEST ############################################################            
 def eu_southwest():
-    print("=============== EU SOUTHWEST ===============")
+    print("\n\n=============== EU SOUTHWEST ===============")
     try:
         with open("request.json", "r") as f:
             x = json.load(f)
@@ -358,16 +381,23 @@ def eu_southwest():
                 x = ""
                 return None
             elif r2.status_code == 401:
-                print("[!] UNAUTHORIZED - PRINTING NEW AUTH KEY [!]")
+                print("[!] UNAUTHORIZED - GETTING NEW AUTH KEY [!]")
                 refresh_key()
                 exit()
             elif 429 in (r1.status_code, r2.status_code):
+                global flag
                 if flag == 1:
                     print("[!] 429 Too Many Requests - waiting 1 minute [!]")
+                    flag += 1
                     time.sleep(60)
                     eu_southwest()
+                elif flag == 2:
+                    flag += 1
+                    print("[!] 429 Too Many Requests - waiting 3 minutes [!]")
+                    time.sleep(180)
+                    eu_southwest()
                 else:
-                    flag = 1
+                    flag += 1
                     print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
                     time.sleep(30)
                     eu_southwest()
@@ -414,7 +444,7 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
 
 ############################################################ EU SOUTHEAST ############################################################
 def eu_southeast():
-    print("=============== EU SOUTHEAST ===============")
+    print("\n\n=============== EU SOUTHEAST ===============")
     try:
         with open("request.json", "r") as f:
             x = json.load(f)
@@ -433,16 +463,23 @@ def eu_southeast():
                 x = ""
                 return None
             elif r2.status_code == 401:
-                print("[!] UNAUTHORIZED - PRINTING NEW AUTH KEY [!]")
+                print("[!] UNAUTHORIZED - GETTING NEW AUTH KEY [!]")
                 refresh_key()
                 exit()
             elif 429 in (r1.status_code, r2.status_code):
+                global flag
                 if flag == 1:
                     print("[!] 429 Too Many Requests - waiting 1 minute [!]")
+                    flag += 1
                     time.sleep(60)
                     eu_southeast()
+                elif flag == 2:
+                    flag += 1
+                    print("[!] 429 Too Many Requests - waiting 3 minutes [!]")
+                    time.sleep(180)
+                    eu_southeast()
                 else:
-                    flag = 1
+                    flag += 1
                     print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
                     time.sleep(30)
                     eu_southeast()
@@ -488,7 +525,6 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
 
 try:
     eu_west()
-    flag = 0
 except KeyError:
     print("\nKeyError, continuing\n")
 
