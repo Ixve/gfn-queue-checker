@@ -3,6 +3,7 @@ import time
 import json
 import requests
 from settings import data
+
 flag = 0
 def refresh_key():
     try:
@@ -13,8 +14,8 @@ def refresh_key():
                 x = {"authorization": f'GFNJWT {k["id_token"]}'}
                 json.dump(x, fw, indent=4, sort_keys=True)
                 fw.close()
-            print("[#] AUTHORIZATION KEY REFRESHED - RELAUNCH PROGRAM [#]")
-            exit()
+            print("[#] AUTHORIZATION KEY REFRESHED - RELAUNCHING [#]")
+            main()
         elif r.status_code == 429:
             print("[!] Error refreshing key: Rate limited (429) - waiting 30 seconds...")
             time.sleep(30)
@@ -25,17 +26,19 @@ def refresh_key():
         print(f"Unknown exception has occured: \n\n {e}")
         exit()
 
-try:
-    with open('authorization.json', 'r') as tx:
-        nx = json.load(tx)
-except:
-    refresh_key()
+def auth_get():
+    try:
+        with open('authorization.json', 'r') as tx:
+            nx = json.load(tx)
+    except:
+        refresh_key()
 
-headers = {
-    "Accept": "*/*",
-    "authorization": f'{nx["authorization"]}',
-    "content-type": "application/json",
-}
+    global headers
+    headers = {
+        "Accept": "*/*",
+        "authorization": f'{nx["authorization"]}',
+        "content-type": "application/json",
+    }
 
 
 ############################################################ EU WEST ############################################################
@@ -523,142 +526,149 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
         print(f"Unknown Exception: \n\n {e}")
         return None
 
-try:
-    eu_west()
-except KeyError:
-    print("\nKeyError, continuing\n")
+def main():
+    try:
+        auth_get()
+    except Exception as e:
+        print(f"Error updating headers with authorization key: \n\n {e}")
+        
+    try:
+        eu_west()
+    except KeyError:
+        print("\nKeyError, continuing\n")
 
-try:
-    eu_northwest()
-    flag = 0
-except KeyError:
-    print("\nKeyError, continuing\n")
+    try:
+        eu_northwest()
+        flag = 0
+    except KeyError:
+        print("\nKeyError, continuing\n")
 
-try:
-    eu_northeast()
-    flag = 0
-except KeyError:
-    print("\nKeyError, continuing\n")
+    try:
+        eu_northeast()
+        flag = 0
+    except KeyError:
+        print("\nKeyError, continuing\n")
 
-try:
-    eu_central()
-    flag = 0
-except KeyError:
-    print("\nKeyError, continuing\n")
+    try:
+        eu_central()
+        flag = 0
+    except KeyError:
+        print("\nKeyError, continuing\n")
 
-try:
-    eu_southwest()
-    flag = 0
-except KeyError:
-    print("\nKeyError, continuing\n")
+    try:
+        eu_southwest()
+        flag = 0
+    except KeyError:
+        print("\nKeyError, continuing\n")
 
-try:
-    eu_southeast()
-    flag = 0
-except KeyError:
-    print("\nKeyError, exitting.\n")
+    try:
+        eu_southeast()
+        flag = 0
+    except KeyError:
+        print("\nKeyError, exitting.\n")
+        exit()
+
+    print("\n\n\ \ ....... FINAL DATA RESULTS ....... / / ")
+    try:
+        with open("response_euwest.json") as f:
+            x = json.load(f)
+            print(f'EU West ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
+            x = ""
+            f.close()
+    except KeyError:
+        print("Missing queue position data for EU West... Continuing")
+        x = ""
+        f.close()
+    except FileNotFoundError:
+        print("Missing data for EU West... Waiting 60 seconds and retrying")
+        time.sleep(60)
+        eu_west()
+
+    try:
+        with open("response_eunorthwest.json") as f:
+            x = json.load(f)
+            print(f'EU Northwest ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
+            x = ""
+            f.close()
+    except KeyError:
+        print("Missing queue position data for EU Northwest... Continuing")
+        x = ""
+        f.close()
+    except FileNotFoundError:
+        print("Missing data for EU Northwest... Waiting 60 seconds and retrying")
+        time.sleep(60)
+        eu_northwest()
+
+    try:
+        with open("response_eunortheast.json") as f:
+            x = json.load(f)
+            print(f'EU Northeast ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
+            x = ""
+            f.close()
+    except KeyError:
+        print("Missing queue position data for EU Northeast... Continuing")
+        x = ""
+        f.close()
+    except FileNotFoundError:
+        print("Missing data for EU Northeast... Waiting 60 seconds and retrying")
+        time.sleep(60)
+        eu_northeast()
+
+    try:
+        with open("response_eucentral.json") as f:
+            x = json.load(f)
+            print(f'EU Central ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
+            x = ""
+            f.close()
+    except KeyError:
+        print("Missing queue position data for EU Central... Continuing")
+        x = ""
+        f.close()
+    except FileNotFoundError:
+        print("Missing data for EU Central... Waiting 60 seconds and retrying")
+        time.sleep(60)
+        eu_central()
+
+    try:
+        with open("response_eusouthwest.json") as f:
+            x = json.load(f)
+            print(f'EU Southwest ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
+            x = ""
+            f.close()
+    except KeyError:
+        print("Missing queue position data for EU Southwest... Continuing")
+        x = ""
+        f.close()  
+    except FileNotFoundError:
+        print("Missing data for EU Southwest... Waiting 60 seconds and retrying")
+        time.sleep(60)
+        eu_southwest()
+
+    try:
+        with open("response_eusoutheast.json") as f:
+            x = json.load(f)
+            print(f'EU Southeast ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
+            x = ""
+            f.close()
+    except KeyError:
+        print("Missing queue position data for EU Southeast... Continuing")
+        x = ""
+        f.close()
+    except FileNotFoundError:
+        print("Missing data for EU Southeast... Waiting 60 seconds and retrying")
+        time.sleep(60)
+        eu_southeast()
+
+        
+    try:
+        os.remove("response_eucentral.json")
+        os.remove("response_eusoutheast.json")
+        os.remove("response_eusouthwest.json")
+        os.remove("response_eunortheast.json")
+        os.remove("response_eunorthwest.json")
+        os.remove("response_euwest.json")
+    except Exception as e:
+        print(f"Unknown exception whilst removing files: \n\n {e}")
     exit()
 
-print("\n\n\ \ ....... FINAL DATA RESULTS ....... / / ")
-try:
-    with open("response_euwest.json") as f:
-        x = json.load(f)
-        print(f'EU West ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
-        x = ""
-        f.close()
-except KeyError:
-    print("Missing queue position data for EU West... Continuing")
-    x = ""
-    f.close()
-except FileNotFoundError:
-    print("Missing data for EU West... Waiting 60 seconds and retrying")
-    time.sleep(60)
-    eu_west()
-
-try:
-    with open("response_eunorthwest.json") as f:
-        x = json.load(f)
-        print(f'EU Northwest ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
-        x = ""
-        f.close()
-except KeyError:
-    print("Missing queue position data for EU Northwest... Continuing")
-    x = ""
-    f.close()
-except FileNotFoundError:
-    print("Missing data for EU Northwest... Waiting 60 seconds and retrying")
-    time.sleep(60)
-    eu_northwest()
-
-try:
-    with open("response_eunortheast.json") as f:
-        x = json.load(f)
-        print(f'EU Northeast ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
-        x = ""
-        f.close()
-except KeyError:
-    print("Missing queue position data for EU Northeast... Continuing")
-    x = ""
-    f.close()
-except FileNotFoundError:
-    print("Missing data for EU Northeast... Waiting 60 seconds and retrying")
-    time.sleep(60)
-    eu_northeast()
-
-try:
-    with open("response_eucentral.json") as f:
-        x = json.load(f)
-        print(f'EU Central ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
-        x = ""
-        f.close()
-except KeyError:
-    print("Missing queue position data for EU Central... Continuing")
-    x = ""
-    f.close()
-except FileNotFoundError:
-    print("Missing data for EU Central... Waiting 60 seconds and retrying")
-    time.sleep(60)
-    eu_central()
-
-try:
-    with open("response_eusouthwest.json") as f:
-        x = json.load(f)
-        print(f'EU Southwest ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
-        x = ""
-        f.close()
-except KeyError:
-    print("Missing queue position data for EU Southwest... Continuing")
-    x = ""
-    f.close()  
-except FileNotFoundError:
-    print("Missing data for EU Southwest... Waiting 60 seconds and retrying")
-    time.sleep(60)
-    eu_southwest()
-
-try:
-    with open("response_eusoutheast.json") as f:
-        x = json.load(f)
-        print(f'EU Southeast ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
-        x = ""
-        f.close()
-except KeyError:
-    print("Missing queue position data for EU Southeast... Continuing")
-    x = ""
-    f.close()
-except FileNotFoundError:
-    print("Missing data for EU Southeast... Waiting 60 seconds and retrying")
-    time.sleep(60)
-    eu_southeast()
-
-    
-try:
-    os.remove("response_eucentral.json")
-    os.remove("response_eusoutheast.json")
-    os.remove("response_eusouthwest.json")
-    os.remove("response_eunortheast.json")
-    os.remove("response_eunorthwest.json")
-    os.remove("response_euwest.json")
-except Exception as e:
-    print(f"Unknown exception whilst removing files: \n\n {e}")
-exit()
-
+main()
