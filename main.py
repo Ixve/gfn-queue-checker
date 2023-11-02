@@ -6,6 +6,7 @@ from settings import data
 
 flag = 0
 versionflag = 0
+
 def refresh_key():
     try:
         r = requests.post("https://login.nvidia.com/token", data=data, headers={'Content-Type': 'application/x-www-form-urlencoded'})
@@ -58,7 +59,7 @@ def version_bump():
 
 ############################################################ EU WEST ############################################################
 def eu_west():
-    print("\n\n=============== EU WEST ===============")
+    print("=============== EU WEST ===============")
     try:
         with open("request.json", "r") as f:
             x = json.load(f)
@@ -67,9 +68,8 @@ def eu_west():
             r2 = requests.post("https://eu-west.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r2.status_code}")
             if 500 in (r1.status_code, r2.status_code):
-                print("[!] 500 Internal Server Error - GFN servers are experiencing issues, try again later [!]")
+                print("[!] 401 Unauthorized - grabbing new authentication key... [!]")
                 f.close()
-                x = ""
                 return None
             elif r2.status_code == 401:
                 print("[!] 401 Unauthorized - grabbing new authentication key... [!]")
@@ -118,7 +118,6 @@ def eu_west():
                     json.dump(r2.json(), fw, indent=4)
                     fw.close()
                 f.close()
-                x = ""
             else:
                 print(f"Unknown error, status code: {r2.status_code}")
                 return None
@@ -139,7 +138,6 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
                 r = requests.delete(f'https://{x["session"]["sessionControlInfo"]["ip"]}{x["session"]["sessionControlInfo"]["resourcePath"]}')
                 print(f"DELETE Request sent!\nStatus Code: {r.status_code}")
                 f.close()
-                x = ""
             except Exception as e:
                 print(f"Unknown exception occured! \n\n {e} \n Resorting to manual session kill.")
                 y0 = input(str("Server: "))
@@ -147,7 +145,6 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
                 r = requests.delete("https://{y0}.cloudmatchbeta.nvidiagrid.net/v2/session/{y1}")
                 print(f"DELETE Request sent!\nStatus Code: {r.status_code}")
                 f.close()
-                x = ""
     except Exception as e:
         print(f"Unknown Exception: \n\n {e}")
         return None
@@ -164,17 +161,15 @@ def eu_northwest():
             if r1.status_code == 500:
                 print("[!] INTERNAL SERVER ERROR [!]")
                 f.close()
-                x = ""
                 return None
             r2 = requests.post("https://eu-northwest.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r2.status_code}")
             if r2.status_code == 500:
                 print("[!] INTERNAL SERVER ERROR [!]")
                 f.close()
-                x = ""
                 return None
             elif r2.status_code == 401:
-                print("[!] UNAUTHORIZED - GETTING NEW AUTH KEY [!]")
+                print("[!] 401 Unauthorized - grabbing new authentication key... [!]")
                 refresh_key()
                 exit()
             elif 429 in (r1.status_code, r2.status_code):
@@ -200,7 +195,6 @@ def eu_northwest():
                     json.dump(r2.json(), fw, indent=4)
                     fw.close()
                 f.close()
-                x = ""
             else:
                 print(f"Unknown error, status code: {r2.status_code}")
                 return None
@@ -221,7 +215,6 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
                 r = requests.delete(f'https://{x["session"]["sessionControlInfo"]["ip"]}{x["session"]["sessionControlInfo"]["resourcePath"]}')
                 print(f"DELETE Request sent!\nStatus Code: {r.status_code}")
                 f.close()
-                x = ""
             except Exception as e:
                 print(f"Unknown exception occured! \n\n {e} \n Resorting to manual session kill.")
                 y0 = input(str("Server: "))
@@ -229,7 +222,6 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
                 r = requests.delete("https://{y0}.cloudmatchbeta.nvidiagrid.net/v2/session/{y1}")
                 print(f"DELETE Request sent!\nStatus Code: {r.status_code}")
                 f.close()
-                x = ""
     except Exception as e:
         print(f"Unknown Exception: \n\n {e}")
         return None
@@ -245,17 +237,15 @@ def eu_northeast():
             if r1.status_code == 500:
                 print("[!] INTERNAL SERVER ERROR [!]")
                 f.close()
-                x = ""
                 return None
             r2 = requests.post("https://eu-northeast.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r2.status_code}")
             if r2.status_code == 500:
                 print("[!] INTERNAL SERVER ERROR [!]")
                 f.close()
-                x = ""
                 return None
             elif r2.status_code == 401:
-                print("[!] UNAUTHORIZED - GETTING NEW AUTH KEY [!]")
+                print("[!] 401 Unauthorized - grabbing new authentication key... [!]")
                 refresh_key()
                 exit()
             elif 429 in (r1.status_code, r2.status_code):
@@ -281,7 +271,6 @@ def eu_northeast():
                     json.dump(r2.json(), fw, indent=4)
                     fw.close()
                 f.close()
-                x = ""
             else:
                 print(f"Unknown error, status code: {r2.status_code}")
                 return None
@@ -302,7 +291,6 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
                 r = requests.delete(f'https://{x["session"]["sessionControlInfo"]["ip"]}{x["session"]["sessionControlInfo"]["resourcePath"]}')
                 print(f"DELETE Request sent!\nStatus Code: {r.status_code}")
                 f.close()
-                x = ""
             except Exception as e:
                 print(f"Unknown exception occured! \n\n {e} \n Resorting to manual session kill.")
                 y0 = input(str("Server: "))
@@ -310,7 +298,6 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
                 r = requests.delete("https://{y0}.cloudmatchbeta.nvidiagrid.net/v2/session/{y1}")
                 print(f"DELETE Request sent!\nStatus Code: {r.status_code}")
                 f.close()
-                x = ""
 
     except Exception as e:
         print(f"Unknown Exception: \n\n {e}")
@@ -327,17 +314,15 @@ def eu_central():
             if r1.status_code == 500:
                 print("[!] INTERNAL SERVER ERROR [!]")
                 f.close()
-                x = ""
                 return None
             r2 = requests.post("https://eu-central.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r2.status_code}")
             if r2.status_code == 500:
                 print("[!] INTERNAL SERVER ERROR [!]")
                 f.close()
-                x = ""
                 return None
             elif r2.status_code == 401:
-                print("[!] UNAUTHORIZED - GETTING NEW AUTH KEY [!]")
+                print("[!] 401 Unauthorized - grabbing new authentication key... [!]")
                 refresh_key()
                 exit()
             elif 429 in (r1.status_code, r2.status_code):
@@ -363,7 +348,6 @@ def eu_central():
                     json.dump(r2.json(), fw, indent=4)
                     fw.close()
                 f.close()
-                x = ""
             else:
                 print(f"Unknown error, status code: {r2.status_code}")
                 return None
@@ -384,7 +368,6 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
                 r = requests.delete(f'https://{x["session"]["sessionControlInfo"]["ip"]}{x["session"]["sessionControlInfo"]["resourcePath"]}')
                 print(f"DELETE Request sent!\nStatus Code: {r.status_code}")
                 f.close()
-                x = ""
             except Exception as e:
                 print(f"Unknown exception occured! \n\n {e} \n Resorting to manual session kill.")
                 y0 = input(str("Server: "))
@@ -392,7 +375,6 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
                 r = requests.delete("https://{y0}.cloudmatchbeta.nvidiagrid.net/v2/session/{y1}")
                 print(f"DELETE Request sent!\nStatus Code: {r.status_code}")
                 f.close()
-                x = ""
 
     except Exception as e:
         print(f"Unknown Exception: \n\n {e}")
@@ -409,17 +391,15 @@ def eu_southwest():
             if r1.status_code == 500:
                 print("[!] INTERNAL SERVER ERROR [!]")
                 f.close()
-                x = ""
                 return None
             r2 = requests.post("https://eu-southwest.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r2.status_code}")
             if r2.status_code == 500:
                 print("[!] INTERNAL SERVER ERROR [!]")
                 f.close()
-                x = ""
                 return None
             elif r2.status_code == 401:
-                print("[!] UNAUTHORIZED - GETTING NEW AUTH KEY [!]")
+                print("[!] 401 Unauthorized - grabbing new authentication key... [!]")
                 refresh_key()
                 exit()
             elif 429 in (r1.status_code, r2.status_code):
@@ -445,7 +425,6 @@ def eu_southwest():
                     json.dump(r2.json(), fw, indent=4)
                     fw.close()
                 f.close()
-                x = ""
             else:
                 print(f"Unknown error, status code: {r2.status_code}")
                 return None
@@ -466,7 +445,6 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
                 r = requests.delete(f'https://{x["session"]["sessionControlInfo"]["ip"]}{x["session"]["sessionControlInfo"]["resourcePath"]}')
                 print(f"DELETE Request sent!\nStatus Code: {r.status_code}")
                 f.close()
-                x = ""
             except Exception as e:
                 print(f"Unknown exception occured! \n\n {e} \n Resorting to manual session kill.")
                 y0 = input(str("Server: "))
@@ -474,7 +452,6 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
                 r = requests.delete("https://{y0}.cloudmatchbeta.nvidiagrid.net/v2/session/{y1}")
                 print(f"DELETE Request sent!\nStatus Code: {r.status_code}")
                 f.close()
-                x = ""
 
     except Exception as e:
         print(f"Unknown Exception: \n\n {e}")
@@ -491,17 +468,15 @@ def eu_southeast():
             if r1.status_code == 500:
                 print("[!] INTERNAL SERVER ERROR [!]")
                 f.close()
-                x = ""
                 return None
             r2 = requests.post("https://eu-southeast.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r2.status_code}")
             if r2.status_code == 500:
                 print("[!] INTERNAL SERVER ERROR [!]")
                 f.close()
-                x = ""
                 return None
             elif r2.status_code == 401:
-                print("[!] UNAUTHORIZED - GETTING NEW AUTH KEY [!]")
+                print("[!] 401 Unauthorized - grabbing new authentication key... [!]")
                 refresh_key()
                 exit()
             elif 429 in (r1.status_code, r2.status_code):
@@ -527,7 +502,6 @@ def eu_southeast():
                     json.dump(r2.json(), fw, indent=4)
                     fw.close()
                 f.close()
-                x = ""
             else:
                 print(f"Unknown error, status code: {r2.status_code}")
                 return None
@@ -548,7 +522,6 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
                 r = requests.delete(f'https://{x["session"]["sessionControlInfo"]["ip"]}{x["session"]["sessionControlInfo"]["resourcePath"]}')
                 print(f"DELETE Request sent!\nStatus Code: {r.status_code}")
                 f.close()
-                x = ""
             except Exception as e:
                 print(f"Unknown exception occured! \n\n {e} \n Resorting to manual session kill.")
                 y0 = input(str("Server: "))
@@ -556,7 +529,6 @@ Current Queue Position: {x["session"]["seatSetupInfo"]["queuePosition"]}
                 r = requests.delete("https://{y0}.cloudmatchbeta.nvidiagrid.net/v2/session/{y1}")
                 print(f"DELETE Request sent!\nStatus Code: {r.status_code}")
                 f.close()
-                x = ""
     except Exception as e:
         print(f"Unknown Exception: \n\n {e}")
         return None
@@ -608,11 +580,9 @@ def main():
         with open("response_euwest.json") as f:
             x = json.load(f)
             print(f'EU West ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
-            x = ""
             f.close()
     except KeyError:
         print("Missing queue position data for EU West... Continuing")
-        x = ""
         f.close()
     except FileNotFoundError:
         print("Missing data for EU West... Waiting 60 seconds and retrying")
@@ -623,11 +593,9 @@ def main():
         with open("response_eunorthwest.json") as f:
             x = json.load(f)
             print(f'EU Northwest ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
-            x = ""
             f.close()
     except KeyError:
         print("Missing queue position data for EU Northwest... Continuing")
-        x = ""
         f.close()
     except FileNotFoundError:
         print("Missing data for EU Northwest... Waiting 60 seconds and retrying")
@@ -638,11 +606,9 @@ def main():
         with open("response_eunortheast.json") as f:
             x = json.load(f)
             print(f'EU Northeast ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
-            x = ""
             f.close()
     except KeyError:
         print("Missing queue position data for EU Northeast... Continuing")
-        x = ""
         f.close()
     except FileNotFoundError:
         print("Missing data for EU Northeast... Waiting 60 seconds and retrying")
@@ -653,11 +619,9 @@ def main():
         with open("response_eucentral.json") as f:
             x = json.load(f)
             print(f'EU Central ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
-            x = ""
             f.close()
     except KeyError:
         print("Missing queue position data for EU Central... Continuing")
-        x = ""
         f.close()
     except FileNotFoundError:
         print("Missing data for EU Central... Waiting 60 seconds and retrying")
@@ -668,11 +632,9 @@ def main():
         with open("response_eusouthwest.json") as f:
             x = json.load(f)
             print(f'EU Southwest ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
-            x = ""
             f.close()
     except KeyError:
         print("Missing queue position data for EU Southwest... Continuing")
-        x = ""
         f.close()  
     except FileNotFoundError:
         print("Missing data for EU Southwest... Waiting 60 seconds and retrying")
@@ -683,11 +645,9 @@ def main():
         with open("response_eusoutheast.json") as f:
             x = json.load(f)
             print(f'EU Southeast ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
-            x = ""
             f.close()
     except KeyError:
         print("Missing queue position data for EU Southeast... Continuing")
-        x = ""
         f.close()
     except FileNotFoundError:
         print("Missing data for EU Southeast... Waiting 60 seconds and retrying")
