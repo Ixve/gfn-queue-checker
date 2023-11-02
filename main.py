@@ -5,6 +5,7 @@ import requests
 from settings import data
 
 flag = 0
+versionflag = 0
 def refresh_key():
     try:
         r = requests.post("https://login.nvidia.com/token", data=data, headers={'Content-Type': 'application/x-www-form-urlencoded'})
@@ -40,6 +41,20 @@ def auth_get():
         "content-type": "application/json",
     }
 
+def version_bump():
+    try:
+        with open('request.json', 'r') as f:
+            x = json.load(f)
+            y = json.dumps(x, indent=4)
+            z = int(float(x["sessionRequestData"]["clientVersion"]))
+            c = y.replace(f'"{z}.0",', f'"{z + 1}.0",')
+            f.close()
+
+        with open('request.json', 'w') as f:
+            f.write(c)
+            f.close()
+    except Exception as e:
+        print(f"An unknown exception has occured while bumping clientVersion: \n\n{e}")
 
 ############################################################ EU WEST ############################################################
 def eu_west():
@@ -76,6 +91,23 @@ def eu_west():
                     flag += 1
                     print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
                     time.sleep(30)
+                    eu_west()
+
+            elif 403 in (r1.status_code, r2.status_code):
+                global versionflag
+                if versionflag == 1:
+                    versionflag += 1
+                    print("[!] VERSIONBUMP FAILED - ATTEMPTING ONE LAST TIME... [!]")
+                    version_bump()
+                    eu_west()
+                elif versionflag == 2:
+                    versionflag += 1
+                    print("[!] VERSIONBUMP FAILED 2x - MANUALLY UPDATE *REQUEST.JSON* [!]")
+                    exit()
+                else:
+                    versionflag += 1
+                    print("[!] REQUEST DATA CLIENTVERSION OUT OF DATE - ATTEMPTING TO BUMP VERSION HIGHER... [!]")
+                    version_bump()
                     eu_west()
             elif r2.status_code == 200:
                 with open("response_euwest.json", "w") as fw:
