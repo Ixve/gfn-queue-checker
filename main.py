@@ -1,8 +1,24 @@
 import os
 import time
 import json
-import requests
+import socket
 from settings import data
+
+try:
+    import requests
+except ModuleNotFoundError:
+    print("Upgrading pip")
+    os.system("python -m pip install --upgrade pip")
+    print("\nInstalling requests library")
+    os.system("python -m pip install requests")
+
+try:
+    from tcppinglib import tcpping
+except ModuleNotFoundError:
+    print("Upgrading pip")
+    os.system("python -m pip install --upgrade pip")
+    print("\nInstalling tcppinglib library")
+    os.system("python -m pip install tcppinglib")
 
 flag = 0
 versionflag = 0
@@ -56,6 +72,12 @@ def version_bump():
             f.close()
     except Exception as e:
         print(f"An unknown exception has occured while bumping clientVersion: \n\n{e}")
+
+def grab_ping():
+    c = socket.getaddrinfo(f'{x["session"]["sessionControlInfo"]["ip"]}', port=443, family=socket.AF_INET, proto=socket.IPPROTO_TCP)
+    print("Testing ping...")
+    n = tcpping(c[0][4][0], port=443, timeout=1.5, count=5, interval=1.5)
+    print(f"Server Ping: {n.avg_rtt}ms\n")
 
 ############################################################ EU WEST ############################################################
 def eu_west():
@@ -580,6 +602,9 @@ def main():
         with open("response_euwest.json") as f:
             x = json.load(f)
             print(f'EU West ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
+            c = socket.getaddrinfo(f'{x["session"]["sessionControlInfo"]["ip"]}', port=443, family=socket.AF_INET, proto=socket.IPPROTO_TCP)
+            n = tcpping(c[0][4][0], port=443, timeout=1.5, count=5, interval=1.5)
+            print(f"Server Ping: {n.avg_rtt}ms\n")
             f.close()
     except KeyError:
         print("Missing queue position data for EU West... Continuing")
@@ -593,6 +618,9 @@ def main():
         with open("response_eunorthwest.json") as f:
             x = json.load(f)
             print(f'EU Northwest ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
+            c = socket.getaddrinfo(f'{x["session"]["sessionControlInfo"]["ip"]}', port=443, family=socket.AF_INET, proto=socket.IPPROTO_TCP)
+            n = tcpping(c[0][4][0], port=443, timeout=1.5, count=5, interval=1.5)
+            print(f"Server Ping: {n.avg_rtt}ms\n")
             f.close()
     except KeyError:
         print("Missing queue position data for EU Northwest... Continuing")
@@ -606,6 +634,9 @@ def main():
         with open("response_eunortheast.json") as f:
             x = json.load(f)
             print(f'EU Northeast ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
+            c = socket.getaddrinfo(f'{x["session"]["sessionControlInfo"]["ip"]}', port=443, family=socket.AF_INET, proto=socket.IPPROTO_TCP)
+            n = tcpping(c[0][4][0], port=443, timeout=1.5, count=5, interval=1.5)
+            print(f"Server Ping: {n.avg_rtt}ms\n")
             f.close()
     except KeyError:
         print("Missing queue position data for EU Northeast... Continuing")
@@ -619,6 +650,9 @@ def main():
         with open("response_eucentral.json") as f:
             x = json.load(f)
             print(f'EU Central ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
+            c = socket.getaddrinfo(f'{x["session"]["sessionControlInfo"]["ip"]}', port=443, family=socket.AF_INET, proto=socket.IPPROTO_TCP)
+            n = tcpping(c[0][4][0], port=443, timeout=1.5, count=5, interval=1.5)
+            print(f"Server Ping: {n.avg_rtt}ms\n")
             f.close()
     except KeyError:
         print("Missing queue position data for EU Central... Continuing")
@@ -632,6 +666,9 @@ def main():
         with open("response_eusouthwest.json") as f:
             x = json.load(f)
             print(f'EU Southwest ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
+            c = socket.getaddrinfo(f'{x["session"]["sessionControlInfo"]["ip"]}', port=443, family=socket.AF_INET, proto=socket.IPPROTO_TCP)
+            n = tcpping(c[0][4][0], port=443, timeout=1.5, count=5, interval=1.5)
+            print(f"Server Ping: {n.avg_rtt}ms\n")
             f.close()
     except KeyError:
         print("Missing queue position data for EU Southwest... Continuing")
@@ -645,6 +682,9 @@ def main():
         with open("response_eusoutheast.json") as f:
             x = json.load(f)
             print(f'EU Southeast ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
+            c = socket.getaddrinfo(f'{x["session"]["sessionControlInfo"]["ip"]}', port=443, family=socket.AF_INET, proto=socket.IPPROTO_TCP)
+            n = tcpping(c[0][4][0], port=443, timeout=1.5, count=5, interval=1.5)
+            print(f"Server Ping: {n.avg_rtt}ms")
             f.close()
     except KeyError:
         print("Missing queue position data for EU Southeast... Continuing")
