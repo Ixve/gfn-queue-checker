@@ -15,7 +15,7 @@ def refresh_key():
                 x = {"authorization": f'GFNJWT {k["id_token"]}'}
                 json.dump(x, fw, indent=4, sort_keys=True)
                 fw.close()
-            print("[#] AUTHORIZATION KEY REFRESHED - RELAUNCHING [#]")
+            print("[#] Authorization key refreshed - relaunching program [#]")
             main()
         elif r.status_code == 429:
             print("[!] Error refreshing key: Rate limited (429) - waiting 30 seconds...")
@@ -67,48 +67,51 @@ def eu_west():
             r2 = requests.post("https://eu-west.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r2.status_code}")
             if 500 in (r1.status_code, r2.status_code):
-                print("[!] INTERNAL SERVER ERROR [!]")
+                print("[!] 500 Internal Server Error - GFN servers are experiencing issues, try again later [!]")
                 f.close()
                 x = ""
                 return None
             elif r2.status_code == 401:
-                print("[!] UNAUTHORIZED - GETTING NEW AUTH KEY [!]")
+                print("[!] 401 Unauthorized - grabbing new authentication key... [!]")
                 refresh_key()
                 exit()
             elif 429 in (r1.status_code, r2.status_code):
                 global flag
                 if flag == 1:
-                    print("[!] 429 Too Many Requests - waiting 1 minute [!]")
+                    print("[!] 429 Too Many Requests - Ratelimited, waiting 1 minute [!]")
                     flag += 1
                     time.sleep(60)
                     eu_west()
                 elif flag == 2:
                     flag += 1
-                    print("[!] 429 Too Many Requests - waiting 3 minutes [!]")
+                    print("[!] 429 Too Many Requests - Ratelimited, waiting 3 minutes [!]")
                     time.sleep(180)
                     eu_west()
                 else:
                     flag += 1
-                    print("[!] 429 Too Many Requests - waiting 30 seconds... [!]")
+                    print("[!] 429 Too Many Requests - Ratelimited, waiting 30 seconds... [!]")
                     time.sleep(30)
                     eu_west()
 
             elif 403 in (r1.status_code, r2.status_code):
-                global versionflag
-                if versionflag == 1:
-                    versionflag += 1
-                    print("[!] VERSIONBUMP FAILED - ATTEMPTING ONE LAST TIME... [!]")
-                    version_bump()
-                    eu_west()
-                elif versionflag == 2:
-                    versionflag += 1
-                    print("[!] VERSIONBUMP FAILED 2x - MANUALLY UPDATE *REQUEST.JSON* [!]")
-                    exit()
+                if "INVALID_REQUEST_VERSION_OUT_OF_DATE_STATUS" in r2.text:
+                    global versionflag
+                    if versionflag == 1:
+                        versionflag += 1
+                        print("[!] VersionBump failed - attempting one last time... [!]")
+                        version_bump()
+                        eu_west()
+                    elif versionflag == 2:
+                        versionflag += 1
+                        print("[!] VersionBump failed twice - update your request.json [!]")
+                        exit()
+                    else:
+                        versionflag += 1
+                        print("[!] 403 Unauthorized - Request clientVersion out of date, attempting VersionBump... [!]")
+                        version_bump()
+                        eu_west()
                 else:
-                    versionflag += 1
-                    print("[!] REQUEST DATA CLIENTVERSION OUT OF DATE - ATTEMPTING TO BUMP VERSION HIGHER... [!]")
-                    version_bump()
-                    eu_west()
+                    print("[!] 403 Unauthorized - Unknown error, send request.json to developer [!]")
             elif r2.status_code == 200:
                 with open("response_euwest.json", "w") as fw:
                     print("Dumping to response_euwest.json")
