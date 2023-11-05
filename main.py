@@ -32,10 +32,10 @@ def refresh_key():
                 x = {"authorization": f'GFNJWT {k["id_token"]}'}
                 json.dump(x, fw, indent=4, sort_keys=True)
                 fw.close()
-            print("[#] Authorization key refreshed - relaunching program [#]")
+            print("[#] Authorization key refreshed - relaunching program [#]\n")
             main()
         elif r.status_code == 429:
-            print("[!] Error refreshing key: Rate limited (429) - waiting 30 seconds...")
+            print("[!] Error refreshing key: Rate limited (429) - waiting 30 seconds... [!]")
             time.sleep(30)
         else:
             print("An error has occured while POSTing data! \n\n Status Code: {r.status_code}\nReturned Data: {r.text}\n")
@@ -77,7 +77,7 @@ def grab_ping():
     c = socket.getaddrinfo(f'{x["session"]["sessionControlInfo"]["ip"]}', port=443, family=socket.AF_INET, proto=socket.IPPROTO_TCP)
     print("Testing ping...")
     n = tcpping(c[0][4][0], port=443, timeout=1.5, count=5, interval=1.5)
-    print(f"Server Ping: {n.avg_rtt}ms\n")
+    print(f"Approximate Server Ping: {n.avg_rtt}ms\n")
 
 ############################################################ EU WEST ############################################################
 def eu_west():
@@ -90,7 +90,7 @@ def eu_west():
             r2 = requests.post("https://eu-west.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r2.status_code}")
             if 500 in (r1.status_code, r2.status_code):
-                print("[!] 401 Unauthorized - grabbing new authentication key... [!]")
+                print("[!] Internal Server Error [!]")
                 f.close()
                 return None
             elif r2.status_code == 401:
@@ -181,19 +181,15 @@ def eu_northwest():
             r1 = requests.post("https://eu-northwest.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r1.status_code}")
             if r1.status_code == 500:
-                print("[!] INTERNAL SERVER ERROR [!]")
+                print("[!] Internal Server Error [!]")
                 f.close()
                 return None
             r2 = requests.post("https://eu-northwest.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r2.status_code}")
             if r2.status_code == 500:
-                print("[!] INTERNAL SERVER ERROR [!]")
+                print("[!] Internal Server Error [!]")
                 f.close()
                 return None
-            elif r2.status_code == 401:
-                print("[!] 401 Unauthorized - grabbing new authentication key... [!]")
-                refresh_key()
-                exit()
             elif 429 in (r1.status_code, r2.status_code):
                 global flag
                 if flag == 1:
@@ -257,19 +253,15 @@ def eu_northeast():
             r1 = requests.post("https://eu-northeast.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r1.status_code}")
             if r1.status_code == 500:
-                print("[!] INTERNAL SERVER ERROR [!]")
+                print("[!] Internal Server Error [!]")
                 f.close()
                 return None
             r2 = requests.post("https://eu-northeast.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r2.status_code}")
             if r2.status_code == 500:
-                print("[!] INTERNAL SERVER ERROR [!]")
+                print("[!] Internal Server Error [!]")
                 f.close()
                 return None
-            elif r2.status_code == 401:
-                print("[!] 401 Unauthorized - grabbing new authentication key... [!]")
-                refresh_key()
-                exit()
             elif 429 in (r1.status_code, r2.status_code):
                 global flag
                 if flag == 1:
@@ -334,19 +326,15 @@ def eu_central():
             r1 = requests.post("https://eu-central.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r1.status_code}")
             if r1.status_code == 500:
-                print("[!] INTERNAL SERVER ERROR [!]")
+                print("[!] Internal Server Error [!]")
                 f.close()
                 return None
             r2 = requests.post("https://eu-central.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r2.status_code}")
             if r2.status_code == 500:
-                print("[!] INTERNAL SERVER ERROR [!]")
+                print("[!] Internal Server Error [!]")
                 f.close()
                 return None
-            elif r2.status_code == 401:
-                print("[!] 401 Unauthorized - grabbing new authentication key... [!]")
-                refresh_key()
-                exit()
             elif 429 in (r1.status_code, r2.status_code):
                 global flag
                 if flag == 1:
@@ -411,19 +399,15 @@ def eu_southwest():
             r1 = requests.post("https://eu-southwest.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r1.status_code}")
             if r1.status_code == 500:
-                print("[!] INTERNAL SERVER ERROR [!]")
+                print("[!] Internal Server Error [!]")
                 f.close()
                 return None
             r2 = requests.post("https://eu-southwest.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r2.status_code}")
             if r2.status_code == 500:
-                print("[!] INTERNAL SERVER ERROR [!]")
+                print("[!] Internal Server Error [!]")
                 f.close()
                 return None
-            elif r2.status_code == 401:
-                print("[!] 401 Unauthorized - grabbing new authentication key... [!]")
-                refresh_key()
-                exit()
             elif 429 in (r1.status_code, r2.status_code):
                 global flag
                 if flag == 1:
@@ -488,19 +472,15 @@ def eu_southeast():
             r1 = requests.post("https://eu-southeast.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r1.status_code}")
             if r1.status_code == 500:
-                print("[!] INTERNAL SERVER ERROR [!]")
+                print("[!] Internal Server Error [!]")
                 f.close()
                 return None
             r2 = requests.post("https://eu-southeast.cloudmatchbeta.nvidiagrid.net/v2/session?keyboardLayout=en-US&languageCode=en_US", json=x, headers=headers)
             print(f"Request status code #1: {r2.status_code}")
             if r2.status_code == 500:
-                print("[!] INTERNAL SERVER ERROR [!]")
+                print("[!] Internal Server Error [!]")
                 f.close()
                 return None
-            elif r2.status_code == 401:
-                print("[!] 401 Unauthorized - grabbing new authentication key... [!]")
-                refresh_key()
-                exit()
             elif 429 in (r1.status_code, r2.status_code):
                 global flag
                 if flag == 1:
@@ -597,14 +577,14 @@ def main():
         print("\nKeyError, exitting.\n")
         exit()
 
-    print("\n\n\ \ ....... FINAL DATA RESULTS ....... / / ")
+    print("\n\n\ \ ....... FINAL DATA RESULTS ....... / / \n(Program may hang while the approximate server ping is grabbed)\n\n")
     try:
         with open("response_euwest.json") as f:
             x = json.load(f)
             print(f'EU West ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
             c = socket.getaddrinfo(f'{x["session"]["sessionControlInfo"]["ip"]}', port=443, family=socket.AF_INET, proto=socket.IPPROTO_TCP)
             n = tcpping(c[0][4][0], port=443, timeout=1.5, count=5, interval=1.5)
-            print(f"Server Ping: {n.avg_rtt}ms\n")
+            print(f"Approximate Server Ping: {n.avg_rtt}ms\n")
             f.close()
     except KeyError:
         print("Missing queue position data for EU West... Continuing")
@@ -620,7 +600,7 @@ def main():
             print(f'EU Northwest ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
             c = socket.getaddrinfo(f'{x["session"]["sessionControlInfo"]["ip"]}', port=443, family=socket.AF_INET, proto=socket.IPPROTO_TCP)
             n = tcpping(c[0][4][0], port=443, timeout=1.5, count=5, interval=1.5)
-            print(f"Server Ping: {n.avg_rtt}ms\n")
+            print(f"Approximate Server Ping: {n.avg_rtt}ms\n")
             f.close()
     except KeyError:
         print("Missing queue position data for EU Northwest... Continuing")
@@ -636,7 +616,7 @@ def main():
             print(f'EU Northeast ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
             c = socket.getaddrinfo(f'{x["session"]["sessionControlInfo"]["ip"]}', port=443, family=socket.AF_INET, proto=socket.IPPROTO_TCP)
             n = tcpping(c[0][4][0], port=443, timeout=1.5, count=5, interval=1.5)
-            print(f"Server Ping: {n.avg_rtt}ms\n")
+            print(f"Approximate Server Ping: {n.avg_rtt}ms\n")
             f.close()
     except KeyError:
         print("Missing queue position data for EU Northeast... Continuing")
@@ -652,7 +632,7 @@ def main():
             print(f'EU Central ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
             c = socket.getaddrinfo(f'{x["session"]["sessionControlInfo"]["ip"]}', port=443, family=socket.AF_INET, proto=socket.IPPROTO_TCP)
             n = tcpping(c[0][4][0], port=443, timeout=1.5, count=5, interval=1.5)
-            print(f"Server Ping: {n.avg_rtt}ms\n")
+            print(f"Approximate Server Ping: {n.avg_rtt}ms\n")
             f.close()
     except KeyError:
         print("Missing queue position data for EU Central... Continuing")
@@ -668,7 +648,7 @@ def main():
             print(f'EU Southwest ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
             c = socket.getaddrinfo(f'{x["session"]["sessionControlInfo"]["ip"]}', port=443, family=socket.AF_INET, proto=socket.IPPROTO_TCP)
             n = tcpping(c[0][4][0], port=443, timeout=1.5, count=5, interval=1.5)
-            print(f"Server Ping: {n.avg_rtt}ms\n")
+            print(f"Approximate Server Ping: {n.avg_rtt}ms\n")
             f.close()
     except KeyError:
         print("Missing queue position data for EU Southwest... Continuing")
@@ -684,7 +664,7 @@ def main():
             print(f'EU Southeast ({x["requestStatus"]["serverId"]}): {x["session"]["seatSetupInfo"]["queuePosition"]}')
             c = socket.getaddrinfo(f'{x["session"]["sessionControlInfo"]["ip"]}', port=443, family=socket.AF_INET, proto=socket.IPPROTO_TCP)
             n = tcpping(c[0][4][0], port=443, timeout=1.5, count=5, interval=1.5)
-            print(f"Server Ping: {n.avg_rtt}ms")
+            print(f"Approximate Server Ping: {n.avg_rtt}ms")
             f.close()
     except KeyError:
         print("Missing queue position data for EU Southeast... Continuing")
