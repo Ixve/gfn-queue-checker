@@ -38,7 +38,7 @@ def refresh_key():
             print("[!] Error refreshing key: Rate limited (429) - waiting 30 seconds... [!]")
             time.sleep(30)
         else:
-            print("An error has occured while POSTing data! \n\n Status Code: {r.status_code}\nReturned Data: {r.text}\n")
+            print(f"An error has occured while POSTing data! \n\n Status Code: {r.status_code}\nReturned Data: {r.text}\n")
             exit()
     except Exception as e:
         print(f"Unknown exception has occured: \n\n {e}")
