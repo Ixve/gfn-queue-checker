@@ -1,3 +1,7 @@
+# Discontinued
+I've committed 1 (technically 2, if you count this) last time(s). Uploading `prototype.py` to the repository, which was supposed to be a tiny optimization and more prettifying the code.<br>
+I do not use GFN anymore, and haven't in a longer period, therefore this repository is simply *not of use* to me, if you wish to fix the code, feel free to and open a PR.
+
 # gfn-queue-checker
 Prerequisites:
 * `requests` library (`pip install requests`)
